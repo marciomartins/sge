@@ -1,0 +1,56 @@
+{% extends "source/base.html" %}
+
+{% block modals %}
+    <div id="confirm" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>Atenção!</h3>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Não</a>
+            <a href="#" id="bt-confirm" class="btn">Sim</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block source-content %}  
+    <h3>Clientes</h3>
+    <table id="tb-cliente-consulta" class="table table-bordered sge clickable">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th width="300px">CNPJ</th>
+                <th width="120px">Total de produtos</th>
+                <th width="16px"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cliente in clientes %}
+            <tr url-edit="{% url source_cliente_alteracao cliente.pk %}"
+                {% if not cliente.status %}
+                    url-status-change="{% url source_cliente_status_change cliente.pk 1 %}"
+                {% else %}
+                    url-status-change="{% url source_cliente_status_change cliente.pk 0 %}"
+                {% endif %}
+                class="{% if cliente.status == 1 %}desactivate{% else %}red-font activate{% endif %}">
+                <td class="cliente_nome">{{ cliente.razao_social }}</td>
+                <td>{{ cliente.cnpj }}</td>
+                <td>{{ cliente.produtos_ativos.count }}</td>
+                <td class="status">
+                    <span class="{% if not cliente.status %}icon-ok{% else %}icon-trash{% endif %}"></span>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">Nenhum cliente incluído.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/lib/jquery.maskedinput-1.3.min.js"></script>
+    <script src="{{ STATIC_URL }}js/scripts/cliente.js"></script>
+{% endblock %}

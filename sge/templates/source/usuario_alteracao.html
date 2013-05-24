@@ -1,0 +1,35 @@
+{% extends "source/base.html" %}
+
+{% block source-content %}
+
+<h3>Atualização de perfil</h3>
+    <form method="post" class="form-horizontal" action="{% url source_perfil_alteracao user.pk %}">
+    	{% csrf_token %}
+        {% for field in form %}
+            <div class="control-group {% if field.errors %}error{% endif %}">
+                <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                {% if field.auto_id == 'id_email' %}
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on">@</span>
+                            {{ field }}
+                            {% if field.errors %}<span class="help-inline">{{ field.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="controls">
+                        {{ field }}
+                        {% if field.errors %}<span class="help-inline">{{ field.errors.as_text }}</span>{% endif %}
+                    </div>
+                {% endif %}                
+            </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-large btn-success">Salvar</button>
+        </div>
+    </form>
+
+{% endblock %}
+
+{% block js %}{% endblock %}

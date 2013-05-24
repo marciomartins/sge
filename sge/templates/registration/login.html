@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+	{% if form.errors %}
+		<div class="login-alert alert alert-error">
+			Usuário e/ou senha incorretos.
+		</div>
+	{% endif %}
+	<div class="login-container">
+		<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+			{% csrf_token %}
+			<h2>Login</h2><br />
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<input type="text" id="id_username" name="username" maxlength="30" placeholder="Usuário" value="{% if form.username.value %}{{ form.username.value }}{% endif %}" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="password" id="id_password" name="password" placeholder="Senha" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button type="submit" class="btn btn-primary">Entrar</button>
+							<input type="hidden" name="next" value="{{ next }}" />
+						</td>
+					</tr>
+	      		</tbody>
+	      	</table>
+		</form>
+	</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "source/base.html" %}
+
+{% block source-content %}
+    <h3>Alteração de locomoção</h3>
+    <form method="post" class="form-horizontal" action="{% url source_locomocao_alteracao locomocao.pk %}">
+        {% csrf_token %}
+        <div id="form-content">
+        {% for field in form %}
+            <div class="control-group {% if field.errors %}error{% endif %}">
+                <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                {% if field.auto_id == 'id_valor' %}
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on">R$</span>
+                            {{ field }}
+                            {% if field.errors %}<span class="help-inline">{{ field.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="controls">
+                        {{ field }}
+                        {% if field.errors %}<span class="help-inline">{{ field.errors.as_text }}</span>{% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-large btn-success">Salvar</button>
+            <a href="{% url source_locomocao_consulta %}" class="btn btn-large btn-primary">Voltar</a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/lib/jquery.price_format.js"></script>
+    <script src="{{ STATIC_URL }}js/lib/jquery.maskedinput-1.3.min.js"></script>
+    <script src="{{ STATIC_URL }}js/scripts/locomocao.js"></script>
+{% endblock %}

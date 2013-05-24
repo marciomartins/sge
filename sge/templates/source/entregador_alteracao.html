@@ -1,0 +1,266 @@
+{% extends "source/base.html" %}
+
+{% block modals %}
+    <div id="dlg-confirm" class="modal fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>Remover cliente</h3>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Não</a>
+            <a href="#" id="bt-confirm" class="btn btn-danger">Sim</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block source-content %}
+    <h3>Alteração de entregadores</h3>
+    <form method="post" class="form-horizontal" action="{% url source_entregador_alteracao entregador.pk %}">
+        {% csrf_token %}
+        <div class="tabbable">
+            <ul id="tab-navegation" class="nav nav-pills">
+                <li id="tab-dados-principais" class="active"><a href="#dados-principais" data-toggle="tab">Dados principais</a></li>
+                <li id="tab-contato"><a href="#contato" data-toggle="tab">Endereço / Contato</a></li>
+                <li id="tab-dados-bancarios"><a href="#dados-bancarios" data-toggle="tab">Dados bancários</a></li>
+                <li id="tab-entrega">
+                    <a href="#entrega" data-toggle="tab">Dados para entrega {% if entregador.entregadorcliente_set.count %}({{ entregador.entregadorcliente_set.count }}){% endif %}</a>
+                </li>
+            </ul>
+            <div id="tab-pane-navegation" class="tab-content">
+                <div class="tab-pane active" id="dados-principais">
+                    <div class="control-group {% if form.tipo_entregador.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.tipo_entregador.auto_id }}">{{ form.tipo_entregador.label }}</label> 
+                        <div class="controls">
+                            {{ form.tipo_entregador }}
+                            {% if form.tipo_entregador.errors %}<span class="help-inline">{{ form.tipo_entregador.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.cpf_cnpj.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.cpf_cnpj.auto_id }}">{{ form.cpf_cnpj.label }}</label> 
+                        <div class="controls">
+                            {{ form.cpf_cnpj }}
+                            {% if form.cpf_cnpj.errors %}<span class="help-inline">{{ form.cpf_cnpj.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.nome.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.nome.auto_id }}">{{ form.nome.label }}</label> 
+                        <div class="controls">{{ form.nome }}</div>
+                    </div>
+                    <div class="control-group {% if form.rg_expedicao.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.rg.auto_id }}">{{ form.rg.label }}</label> 
+                        <div class="controls">
+                            {{ form.rg }} 
+                            <label class="help-inline" for="{{ form.rg_expedicao.auto_id }}">{{ form.rg_expedicao.label }}</label> {{ form.rg_expedicao }}
+                            {% if form.rg_expedicao.errors %}<span class="help-inline">{{ form.rg_expedicao.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.status.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.status.auto_id }}">{{ form.status.label }}</label> 
+                        <div class="controls">
+                            {{ form.status }}
+                            {% if form.status.errors %}<span class="help-inline">{{ form.status.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.obs.auto_id }}">{{ form.obs.label }}</label> 
+                        <div class="controls">{{ form.obs }}</div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="contato">
+                    <div class="control-group {% if form.end_rua.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.end_rua.auto_id }}">{{ form.end_rua.label }}</label> 
+                        <div class="controls">
+                            {{ form.end_rua }}
+                            {% if form.end_rua.errors %}<span class="help-inline">{{ form.end_rua.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.end_numero.auto_id }}">{{ form.end_numero.label }}</label> 
+                        <div class="controls">
+                            {{ form.end_numero }}
+                            {{ form.end_complemento }}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.end_bairro.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.end_bairro.auto_id }}">{{ form.end_bairro.label }}</label> 
+                        <div class="controls">
+                            {{ form.end_bairro }}
+                            {% if form.end_bairro.errors %}<span class="help-inline">{{ form.end_bairro.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.end_estado.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.end_estado.auto_id }}">{{ form.end_estado.label }}</label> 
+                        <div class="controls">
+                            {{ form.end_estado }}
+                            {% if form.end_estado.errors %}<span class="help-inline">{{ form.end_estado.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.end_cidade.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.end_cidade.auto_id }}">{{ form.end_cidade.label }}</label> 
+                        <div class="controls">
+                            {{ form.end_cidade }}
+                            {% if form.end_cidade.errors %}<span class="help-inline">{{ form.end_cidade.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.email.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.email.auto_id }}">{{ form.email.label }}</label> 
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">@</span>
+                                {{ form.email }}
+                                {% if form.email.errors %}<span class="help-inline">{{ form.email.errors.as_text }}</span>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.tel_1.auto_id }}">{{ form.tel_1.label }}</label> 
+                        <div class="controls">
+                            <span class="control-group {% if form.tel_1.errors %}error{% endif %}">{{ form.tel_1 }}</span>
+                            {{ form.tel_1_ramal }}
+                            <span class="control-group {% if form.tel_1.errors %}error{% endif %}">
+                                {% if form.tel_1.errors %}<span class="help-inline">* O telefone é obrigatório</span>{% endif %}
+                            </span>                         
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.tel_2.auto_id }}">{{ form.tel_2.label }}</label> 
+                        <div class="controls">
+                            {{ form.tel_2 }} {{ form.tel_2_ramal }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.tel_id_radio.auto_id }}">{{ form.tel_id_radio.label }}</label> 
+                        <div class="controls">{{ form.tel_id_radio }}</div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="dados-bancarios">
+                    <div class="control-group {% if form.banco.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.banco.auto_id }}">{{ form.banco.label }}</label> 
+                        <div class="controls">
+                            {{ form.banco }}
+                            {% if form.banco.errors %}<span class="help-inline">{{ form.banco.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.agencia.auto_id }}">{{ form.agencia.label }}</label> 
+                        <div class="controls">
+                            <span class="control-group {% if form.agencia.errors %}error{% endif %}">{{ form.agencia }}</span>
+                            {{ form.agencia_dv }}
+                            <span class="control-group {% if form.agencia.errors %}error{% endif %}">
+                                {% if form.agencia.errors %}<span class="help-inline">* O número da agência é obrigatório</span>{% endif %}
+                            </span>                         
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.conta.auto_id }}">{{ form.conta.label }}</label> 
+                        <div class="controls">
+                            <span class="control-group {% if form.conta.errors %}error{% endif %}">{{ form.conta }}</span>
+                            {{ form.conta_dv }}
+                            <span class="control-group {% if form.conta.errors %}error{% endif %}">
+                                {% if form.conta.errors %}<span class="help-inline">* O número da conta é obrigatório</span>{% endif %}
+                            </span>                         
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="entrega">
+                    <div class="control-group {% if form.cidade_atendida.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.cidade_atendida.auto_id }}">{{ form.cidade_atendida.label }}</label> 
+                        <div class="controls">
+                            {{ form.cidade_atendida }}
+                            {% if form.cidade_atendida.errors %}<span class="help-inline">{{ form.cidade_atendida.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.tipo_entraga.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.tipo_entraga.auto_id }}">{{ form.tipo_entraga.label }}</label> 
+                        <div class="controls">
+                            {{ form.tipo_entraga }}
+                            {% if form.tipo_entraga.errors %}<span class="help-inline">{{ form.tipo_entraga.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox">{{ form.pagamento_protocolo }} {{ form.pagamento_protocolo.label }}</label>
+                            {{ form.pagamento_protocolo_valor.label }} &nbsp;
+                            <div class="input-prepend">
+                                <span class="add-on">R$</span> 
+                                {{ form.pagamento_protocolo_valor }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group {% if form.categoria_entregador.errors %}error{% endif %}">
+                        <label class="control-label" for="{{ form.categoria_entregador.auto_id }}">{{ form.categoria_entregador.label }}</label> 
+                        <div class="controls">
+                            {{ form.categoria_entregador }}
+                            {% if form.categoria_entregador.errors %}<span class="help-inline">{{ form.categoria_entregador.errors.as_text }}</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.valor_diaria.auto_id }}">{{ form.valor_diaria.label }}</label> 
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">R$</span> 
+                                {{ form.valor_diaria }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="{{ form.valor_fixo.auto_id }}">{{ form.valor_fixo.label }}</label> 
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">R$</span> 
+                                {{ form.valor_fixo }}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="clientes">
+                        {{ entregadorcliente_formset.management_form }}
+                        <button id="bt-adicionar-cliente" type="button" class="btn btn-small">
+                            <i class="icon-plus"></i>
+                            <span>Adicionar</span>
+                        </button><br /><br />
+                        <table id="tb-clientes" class="table table-bordered table-striped">
+                            <tbody>
+                                {% for entregadorcliente_form in entregadorcliente_formset %}
+                                    <tr>
+                                        <td width="110px">
+                                            {{ entregadorcliente_form.cliente }}
+                                        </td>
+                                        <td class="control-group {% if entregadorcliente_form.errors %}error{% endif %}">
+                                            <div class="input-prepend">
+                                                <span class="add-on">R$</span>
+                                                {{ entregadorcliente_form.valor }}
+                                            </div>
+                                            <span class="valor-maximo-entrega-cliente label label-info hide"></span>
+                                            <input type="hidden" class="valor-maximo-entrega-cliente-hd" />
+
+                                            {{ entregadorcliente_form.DELETE }}
+
+                                            {% for hidden_field in entregadorcliente_form.hidden_fields %}{{ hidden_field }}{% endfor %}
+                                            {% if entregadorcliente_form.errors %}
+                                                <span class="help-inline">* Campo obrigatório</span>
+                                            {% endif %}
+                                        </td>
+                                        <td width="16px" style="vertical-align: middle">
+                                            <a class="icon-trash" href="#"></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-large btn-success">Salvar</button>
+            <a href="{% url source_entregador_consulta %}" class="btn btn-large btn-primary">Voltar</a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/lib/jquery.price_format.js"></script>
+    <script src="{{ STATIC_URL }}js/lib/jquery.maskedinput-1.3.min.js"></script>
+    <script src="{{ STATIC_URL }}js/scripts/entregador.js"></script>
+{% endblock %}

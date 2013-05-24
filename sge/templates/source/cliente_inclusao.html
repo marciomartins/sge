@@ -1,0 +1,174 @@
+{% extends "source/base.html" %}
+
+{% block modals %}
+	<div id="dlg-confirm-remover-produto" class="modal fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Remover produto</h3>
+		</div>
+		<div class="modal-body">
+			<p>Você tem certeza que deseja remover o produto?</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Não</a>
+			<a href="#" id="bt-remover-produto" class="btn btn-danger">Sim</a>
+		</div>
+	</div>
+{% endblock %}
+
+{% block source-content %}
+	<h3>Inclusão de clientes</h3>
+	<form method="post" class="form-horizontal" action="{% url source_cliente_inclusao %}">
+		{% csrf_token %}
+		<div class="tabbable">
+			<ul id="tab-navegation" class="nav nav-pills">
+				<li id="tab-dados-principais" class="active"><a href="#dados-principais" data-toggle="tab">Dados principais</a></li>
+				<li id="tab-produtos"><a href="#produtos" data-toggle="tab">Produtos</a></li>
+			</ul>
+			<div id="tab-pane-navegation" class="tab-content">
+				<div class="tab-pane active" id="dados-principais">
+					<div class="control-group {% if form.cnpj.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.cnpj.auto_id }}">{{ form.cnpj.label }}</label>
+						<div class="controls">
+							{{ form.cnpj }}
+							{% if form.cnpj.errors %}<span class="help-inline">{{ form.cnpj.errors.as_text }}</span>{% endif %}
+						</div>
+					</div>
+					<div class="control-group {% if form.razao_social.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.razao_social.auto_id }}">{{ form.razao_social.label }}</label>
+						<div class="controls">
+							{{ form.razao_social }}
+							{% if form.razao_social.errors %}<span class="help-inline">{{ form.razao_social.errors.as_text }}</span>{% endif %}
+						</div>
+					</div>
+					<div class="control-group {% if form.end_rua.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.end_rua.auto_id }}">{{ form.end_rua.label }}</label>
+						<div class="controls">
+							{{ form.end_rua }}
+							{% if form.end_rua.errors %}<span class="help-inline">{{ form.end_rua.errors.as_text }}</span>{% endif %}
+						</div>
+					</div>
+					<div class="control-group {% if form.end_numero.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.end_numero.auto_id }}">{{ form.end_numero.label }}</label>
+						<div class="controls">
+							{{ form.end_numero }}
+							{{ form.end_complemento }}
+							{% if form.end_numero.errors %}<span class="help-inline">{{ form.end_numero.errors.as_text }}</span>{% endif %}
+						</div>
+					</div>
+					<div class="control-group {% if form.end_bairro.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.end_bairro.auto_id }}">{{ form.end_bairro.label }}</label> 
+						<div class="controls">
+							{{ form.end_bairro }}
+							{% if form.end_bairro.errors %}<span class="help-inline">{{ form.end_bairro.errors.as_text }}</span>{% endif %}
+						</div>
+					</div>
+					<div class="control-group {% if form.end_estado.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.end_estado.auto_id }}">{{ form.end_estado.label }}</label> 
+						<div class="controls">
+							{{ form.end_estado }}
+							{% if form.end_estado.errors %}<span class="help-inline">{{ form.end_estado.errors.as_text }}</span>{% endif %}
+						</div>
+					</div>
+					<div class="control-group {% if form.end_cidade.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.end_cidade.auto_id }}">{{ form.end_cidade.label }}</label> 
+						<div class="controls">
+							{{ form.end_cidade }}
+							{% if form.end_cidade.errors %}<span class="help-inline">{{ form.end_cidade.errors.as_text }}</span>{% endif %}
+						</div>
+					</div>
+					<div class="control-group {% if form.email.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.email.auto_id }}">{{ form.email.label }}</label> 
+						<div class="controls">
+							<div class="input-prepend">
+								<span class="add-on">@</span>
+								{{ form.email }}
+								{% if form.email.errors %}<span class="help-inline">{{ form.email.errors.as_text }}</span>{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="{{ form.tel_1.auto_id }}">{{ form.tel_1.label }}</label> 
+						<div class="controls">
+							<span class="control-group {% if form.tel_1.errors %}error{% endif %}">{{ form.tel_1 }}</span>
+							{{ form.tel_1_ramal }}
+							<span class="control-group {% if form.tel_1.errors %}error{% endif %}">
+								{% if form.tel_1.errors %}<span class="help-inline">* O telefone é obrigatório</span>{% endif %}
+							</span>							
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="{{ form.tel_2.auto_id }}">{{ form.tel_2.label }}</label> 
+						<div class="controls">
+							{{ form.tel_2 }} {{ form.tel_2_ramal }}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="{{ form.tel_fax.auto_id }}">{{ form.tel_fax.label }}</label> 
+						<div class="controls">
+							{{ form.tel_fax }}
+						</div>
+					</div>
+					<div class="control-group {% if form.valor_maximo_entrega.errors %}error{% endif %}">
+						<label class="control-label" for="{{ form.valor_maximo_entrega.auto_id }}">{{ form.valor_maximo_entrega.label }}</label> 
+						<div class="controls">
+							<div class="input-prepend">
+								<span class="add-on">R$</span>
+								{{ form.valor_maximo_entrega }}
+								{% if form.valor_maximo_entrega.errors %}<span class="help-inline">{{ form.valor_maximo_entrega.errors.as_text }}</span>{% endif %}
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="{{ form.status.auto_id }}">{{ form.status.label }}</label> 
+						<div class="controls">
+							{{ form.status }}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="{{ form.obs.auto_id }}">{{ form.obs.label }}</label> 
+						<div class="controls">
+							{{ form.obs }}
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane" id="produtos">
+					<div>
+						{{ clienteproduto_formset.management_form }}
+						<button id="bt-adicionar-linha-produto" type="button" class="btn btn-small">
+							<i class="icon-plus"></i>
+							<span>Adicionar</span>
+						</button><br /><br />
+						<table id="tb-produtos" class="table table-bordered">
+							<tbody>
+								{% for clienteproduto_form in clienteproduto_formset %}
+								<tr>
+									<td class="control-group {% if clienteproduto_form.descricao.errors %}error{% endif %}">
+										{{ clienteproduto_form.descricao }}
+										{% for hidden_field in clienteproduto_form.hidden_fields %}{{ hidden_field }}{% endfor %}
+										<span class="control-group {% if clienteproduto_form.descricao.errors %}error{% endif %}">
+								        	{% if clienteproduto_form.descricao.errors %}<span class="help-inline">* Informe o nome do produto.</span>{% endif %}
+							       	 	</span>
+									</td>
+									<td width="16px" style="vertical-align: middle">
+										<a class="icon-trash" href="#"></a>
+							        </td>
+						       	</tr>
+						        {% endfor %}
+					    	</tbody>
+					    </table>
+				   	</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-actions">
+        	<button type="submit" class="btn btn-large btn-success">Salvar</button>
+        </div>
+	</form>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ STATIC_URL }}js/lib/jquery.price_format.js"></script>
+	<script src="{{ STATIC_URL }}js/lib/jquery.maskedinput-1.3.min.js"></script>
+	<script src="{{ STATIC_URL }}js/scripts/cliente.js"></script>
+{% endblock %}

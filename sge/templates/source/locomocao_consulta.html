@@ -1,0 +1,55 @@
+{% extends "source/base.html" %}
+
+{% block modals %}
+	<div id="confirm" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Atenção!</h3>
+		</div>
+		<div class="modal-body"></div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Não</a>
+			<a href="#" id="bt-confirm" class="btn btn-danger">Sim</a>
+		</div>
+	</div>
+{% endblock %}
+
+{% block source-content %}
+	<h3>Locomoções pendentes</h3>
+	<table id="tb-locomocao-consulta" class="table table-bordered sge clickable">
+		<thead>
+			<tr>
+				<th>Entregador</th>
+				<th width="150px">CPF/CNPJ</th>
+				<th width="200px">Data de cadastro</th>
+				<th width="200px">Tipo de locomoção</th>
+				<th width="100px">Valor</th>
+				<th width="16px"></th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for locomocao in locomocoes_pendentes %}
+			<tr url-sem-comprovante="{% url source_locomocao_pendente locomocao.pk %}"
+				url-edit="{% url source_locomocao_alteracao locomocao.pk %}">
+				<td class="entregador_nome">{{ locomocao.entregador.nome }}</td>
+				<td>{{ locomocao.entregador.cpf_cnpj }}</td>
+				<td>{{ locomocao.data_pagamento }}</td>
+				<td>{{ locomocao.tipo_locomocao|title }}</td>
+				<td>R$ {{ locomocao.valor }}</td>
+				<td title="Comprovante não entregue" class="down">
+					<span class="icon-thumbs-down"></span>
+				</td>
+			</tr>
+		{% empty %}
+            <tr>
+                <td colspan="6" class="no-action">Nenhuma locomoção pendente.</td>
+            </tr>
+		{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ STATIC_URL }}js/lib/jquery.maskedinput-1.3.min.js"></script>
+	<script src="{{ STATIC_URL }}js/scripts/locomocao.js"></script>
+{% endblock %}

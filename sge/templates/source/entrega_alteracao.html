@@ -1,0 +1,117 @@
+{% extends "source/base.html" %}
+
+{% block modals %}
+	<div id="dlg-confirm" class="modal fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Remover cliente</h3>
+		</div>
+		<div class="modal-body"></div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Não</a>
+			<a href="#" id="bt-confirm" class="btn btn-danger">Sim</a>
+		</div>
+	</div>
+{% endblock %}
+
+{% block source-content %}
+	<h3>Alteração de entrega</h3>
+	<form method="post" class="form-horizontal" action="{% url source_entrega_alteracao entrega.pk %}">
+		{% csrf_token %}
+		<ul id="tab-navegation" class="nav nav-pills">
+			<li id="tab-info-entrega" class="active">
+				<a href="#informacoes-principais" data-toggle="tab">Informações principais</a>
+			</li>
+			<li id="tab-itens-entrega">
+				<a href="#itens-entrega" data-toggle="tab">Itens da entrega {% if entrega.entregacliente_set.count %}({{ entrega.entregacliente_set.count }}){% endif %}</a>
+			</li>
+		</ul>
+		<div id="tab-pane-navegation" class="tab-content">
+			<div class="tab-pane active" id="informacoes-principais">
+				<div class="control-group {% if form.entregador.errors %}error{% endif %}">
+					<label class="control-label" for="{{ form.entregador.auto_id }}">{{ form.entregador.label }}</label>
+					<div class="controls">
+						<label class="label-align">{{ entrega.entregador.nome|title }}</label>
+						{{ form.entregador }}
+						{% if form.entregador.errors %}<span class="help-inline">{{ form.entregador.errors.as_text }}</span>{% endif %}
+					</div>
+				</div>
+				<div class="control-group {% if form.saida_data.errors %}error{% endif %}">
+					<label class="control-label" for="{{ form.saida_data.auto_id }}">{{ form.saida_data.label }}</label>
+					<div class="controls">
+						<label class="label-align">{{ entrega.saida_data }}</label>
+						{{ form.saida_data }}
+						{% if form.saida_data.errors %}<span class="help-inline">{{ form.saida_data.errors.as_text }}</span>{% endif %}
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="{{ form.retorno_data.auto_id }}">{{ form.retorno_data.label }}</label>
+					<div class="controls">
+						{{ form.retorno_data }}
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="{{ form.obs.auto_id }}">{{ form.obs.label }}</label>
+					<div class="controls">
+						{{ form.obs }}
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="itens-entrega">
+				<div class="control-group {% if form.status.errors %}error{% endif %}">
+					<label class="control-label" for="{{ form.status.auto_id }}">{{ form.status.label }}</label>
+					<div class="controls">
+						{{ form.status }}
+						{% if form.status.errors %}<span class="help-inline">{{ form.status.errors.as_text }}</span>{% endif %}
+					</div>
+				</div>
+				<div id="clientes">
+					{{ entregacliente_formset.management_form }}
+					<table id="tb-clientes" class="table sge table-bordered">
+						<thead>
+							<tr>
+								<th>Cliente</th>
+								<th width="300px">Quantidade envio</th>
+								<th width="300px">Quantidade retorno</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for form in entregacliente_formset %}
+							<tr>
+								<td class="control-group {% if form.cliente.errors %}error{% endif %}">
+									<label class="label-align">{{ form.instance.cliente.razao_social }}</label>
+									{{ form.cliente }}
+									{% for hidden_field in form.hidden_fields %}{{ hidden_field }}{% endfor %}
+									<span class="control-group {% if form.cliente.errors %}error{% endif %}">
+							        	{% if form.cliente.errors %}<span class="help-inline">* Informe o cliente</span>{% endif %}
+						       	 	</span>
+								</td>
+								<td class="control-group {% if form.qtd_enviada.errors %}error{% endif %}">
+									<label class="label-align">{{ form.instance.qtd_enviada }}</label>
+									{{ form.qtd_enviada }}
+									<span class="control-group {% if form.qtd_enviada.errors %}error{% endif %}">
+							        	{% if form.qtd_enviada.errors %}<span class="help-inline">* Informe a quantidade de envio</span>{% endif %}
+						       	 	</span>
+								</td>
+								<td class="control-group {% if form.qtd_retorno.errors %}error{% endif %}">
+									{{ form.qtd_retorno }}
+								</td>
+					       	</tr>
+					        {% endfor %}
+						</tbody>
+					</table>
+			   	</div>
+			</div>
+		</div>
+		<div class="form-actions">
+        	<button type="submit" class="btn btn-large btn-success">Salvar</button>
+        	<a href="{% url source_entrega_consulta %}" class="btn btn-large btn-primary">Voltar</a>
+        </div>
+	</form>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ STATIC_URL }}js/lib/jquery.maskedinput-1.3.min.js"></script>
+	<script src="{{ STATIC_URL }}js/scripts/entrega.js"></script>
+{% endblock %}

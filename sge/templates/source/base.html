@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block mainmenu %}
+    <div class="nav-collapse">
+        <ul class="nav">
+            {% for item_menu in menu %}
+                {% if not item_menu.2 %}
+                    <li class=""><a href="{% url item_menu.1 %}">{{ item_menu.0 }}</a></li>
+                {% else %}
+                    <li class="dropdown">
+                        <a href="{% if item_menu.1 %}{% url item_menu.1 %}{% else %}{{ item_menu.1 }}{% endif %}" class="dropdown-toggle" data-toggle="dropdown">{{ item_menu.0 }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            {% for sub_item_menu in item_menu.2 %}
+                                <li><a href="{% if sub_item_menu.1 %}{% url sub_item_menu.1 %}{% else %}{{ sub_item_menu.1 }}{% endif %}">{{ sub_item_menu.0 }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-user"></i> {{ user.username }}
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url "source_perfil_alteracao" user.pk %}"><span class="icon-list"></span> Perfil</a></li>
+                <li><a href="{% url "source_mudar_senha" %}"><span class="icon-edit"></span> Mudar senha</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url "auth_logout" %}"><span class="icon-off"></span> Sair</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% if messages  %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% block source-content %}{% endblock %}
+    <footer>
+        <p>&copy; SGE 2012</p>
+    </footer>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "source/base.html" %}
+
+{% block modals %}
+	<div id="confirm" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Atenção!</h3>
+		</div>
+		<div class="modal-body"></div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Não</a>
+			<a href="#" id="bt-confirm" class="btn">Sim</a>
+		</div>
+	</div>
+	<div id="desativar-entregador" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Atenção!</h3>
+		</div>
+		<div class="modal-body"></div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Não</a>
+			<a href="#" id="bt-action" class="btn">Sim</a>
+		</div>
+	</div>
+{% endblock %}
+
+{% block source-content %}	
+	<h3>Entregadores</h3>
+	<table id="tb-entregador-consulta" class="table table-bordered sge clickable">
+		<thead>
+			<tr>
+				<th>Entregador</th>
+				<th width="200px">CPF/CNPJ</th>
+				<th width="200px">Categoria</th>
+				<th width="120px">Clientes</th>
+				<th width="16px"></th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for entregador in entregadores %}
+			<tr url-edit="{% url source_entregador_alteracao entregador.pk %}" 
+				{% if not entregador.status %}
+					url-status-change="{% url source_status_change entregador.pk 1 %}" 
+				{% else %}
+					url-status-change="{% url source_status_change entregador.pk 0 %}" 
+				{% endif %}
+				class="{% if not entregador.status %}red-font activate{% else %}desactivate{% endif %}">
+				<td class="entregador_nome">{{ entregador.nome }}</td>
+				<td>{{ entregador.cpf_cnpj }}</td>
+				<td>{{ entregador.get_categoria_entregador_display }}</td>
+				<td>
+					{{ entregador.entregadorcliente_set.count }}
+				</td>
+				<td class="status">
+					<span class="{% if not entregador.status %}icon-ok{% else %}icon-trash{% endif %}"></span>
+				</td>
+			</tr>
+		{% empty %}
+            <tr>
+                <td colspan="4" class="no-action">Nenhum entregador incluído.</td>
+            </tr>
+        {% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% block js %}
+	<script src="{{ STATIC_URL }}js/lib/jquery.maskedinput-1.3.min.js"></script>
+	<script src="{{ STATIC_URL }}js/scripts/entregador.js"></script>
+{% endblock %}

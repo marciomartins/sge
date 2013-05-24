@@ -1,0 +1,34 @@
+{% extends "source/base.html" %}
+
+{% block source-content %}
+    <div class="hero-unit">
+        <h2>Olá, {{ user.first_name }} {{ user.last_name }}!</h2>
+        <p>Este é o Painel de Controle do SGE - Sistema de Gerenciamento de Entregas. O SGE possui diversas funcionalidades e você pode acessá-las através dos atalhos abaixo ou do menu principal na barra superior. 
+        <!--É a primeira vez que você utiliza o SGE? Clique no botão abaixo para fazer um tour pelo sistema.</p>
+        <p><a id="tour" class="btn btn-primary btn-large">SGE Tour</a></p>-->
+    </div>
+
+    <div class="row">
+        <div class="span4">
+            <h2>Entregas</h2>
+            <p>Esta área permite a criação, consulta e confirmacão de suas entregas. Cada entrega está vinculada a um Cliente, entregador e aos produtos transportados.</p>
+            <p>Você possui <span class="badge badge-info">{{ entregas_pendentes }}</span> entregas e <span class="badge badge-info">{{ transferencias_pendentes }}</span> transferências ainda não confirmadas.</p>
+            <p><a class="btn" href="{% url source_entrega_consulta %}">Consultar entregas &raquo;</a></p>
+        </div>
+        <div class="span4">
+            <h2>Locomoção</h2>
+            <p>Aqui você pode gerar, consultar e atualizar os gastos com locomoção de seus entregadores.</p>
+            <p>No momento existem <span class="badge badge-info">{{ locomocoes_pendentes }}</span> saídas de locomoção sem comprovante.</p>
+            <p><a class="btn" href="{% url source_locomocao_consulta %}">Consultar locomoções &raquo;</a></p>
+        </div>
+        <div class="span4">
+            <h2>Entregadores</h2>
+            <p>Os entregadores são os executores do processo. Você pode incluir, consultar e editar seus entregadores associando valores de entrega específicos para cada produto disponível de seus clientes.</p>
+            <p><a class="btn" href="{% url source_entregador_consulta %}">Consultar entregadores &raquo;</a></p>
+        </div>
+      </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/scripts/painel-controle.js"></script>
+{% endblock %}
