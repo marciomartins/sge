@@ -15,4 +15,4 @@ Scripts
 data/*
 .idea
 fabfile.py
-
+.idea
