@@ -1,4 +1,4 @@
 sge
 ===
 
-Sistema de Gerenciamento de Entregas
+Sistema de Gerenciamento de Entregas desenvolvido para testes.
